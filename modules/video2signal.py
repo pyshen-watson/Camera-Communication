@@ -29,16 +29,23 @@ def video2signal(cap:cv2.VideoCapture) -> list:
     for frame in tqdm(frames):
 
         img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        image_results = []
+        otsu_thresholds = []
 
         # Normalize and thresholding
-        img = (img - np.mean(img, axis=1, keepdims=True)) / np.std(img, axis=1, keepdims=True)
-        img = np.clip(img*1024*1024, 0, 255)
-
-        # Signalize
-        white_in_col = np.sum(img, axis=0) / 255
-        isWhite = lambda white : 1 if white >= ROWSIZE / 2 else 0
-        sig = [isWhite(col) for col in white_in_col]
+        for row in range(ROWSIZE):
+            otsu_threshold, image_result = cv2.threshold(img[row:row+1, 0:COLSIZE], 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+            image_results.append(image_result)
+            otsu_thresholds.append(otsu_threshold)
         
-        signals.append(sig)
+        # Signalize
+        white_in_col = []
+        for col in range(COLSIZE):
+            count = 0
+            for row in range(ROWSIZE):
+                if image_results[row][0, col] >= 128:
+                    count  = count + 1
+            sig = 1 if count > ROWSIZE else 0
+            signals.append(sig)
 
     return signals

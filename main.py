@@ -18,5 +18,5 @@ def convert_video_to_signal_csv(video_name, save=True):
 
 if __name__ == '__main__':
 
-   convert_video_to_signal_csv('video.mp4', save=False)
+   convert_video_to_signal_csv('videos/14.mp4', save=True)
     
