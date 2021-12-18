@@ -1,5 +1,8 @@
 import cv2
 import numpy as np
+from tqdm import tqdm
+
+
 
 def video2frames(cap:cv2.VideoCapture) -> list:
 
@@ -23,7 +26,7 @@ def video2signal(cap:cv2.VideoCapture) -> list:
 
     signals = []
 
-    for frame in frames:
+    for frame in tqdm(frames):
 
         img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
