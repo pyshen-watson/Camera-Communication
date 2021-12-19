@@ -1,2 +1,4 @@
 .env
-/testing
+testing/
+.venv/
+.vscode/
