@@ -14,7 +14,8 @@ def convert_video_to_signal_csv(video_name, save=True):
     if save:
         with open('./signal.csv', 'w') as file:
             writer = csv.writer(file)
-            writer.writerows(signals)
+            for row in signals:
+                writer.writerow(row)
 
 if __name__ == '__main__':
 

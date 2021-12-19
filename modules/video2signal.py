@@ -25,27 +25,47 @@ def video2signal(cap:cv2.VideoCapture) -> list:
     
 
     signals = []
-
     for frame in tqdm(frames):
+        signal = []
 
-        img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        image_results = []
-        otsu_thresholds = []
+        original_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        thresholded_row_imgs = []
+        row_otsu_thresholds = []
 
-        # Normalize and thresholding
+        # otsu_threshold, image_result = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+        # otsu threshold every row 
         for row in range(ROWSIZE):
-            otsu_threshold, image_result = cv2.threshold(img[row:row+1, 0:COLSIZE], 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-            image_results.append(image_result)
-            otsu_thresholds.append(otsu_threshold)
-        
+            row_otsu_threshold, thresholded_row_img = cv2.threshold(original_img[row:row+1, 0:COLSIZE], 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+            thresholded_row_imgs.append(thresholded_row_img)
+            row_otsu_thresholds.append(row_otsu_threshold)
+
+        # concat all row images
+        # thresholded_img = thresholded_row_imgs[0] 
+        # for r in thresholded_row_imgs:
+        #     thresholded_img = cv2.vconcat([thresholded_row_img, r])
+
+        thresholded_img = cv2.vconcat([r for r in thresholded_row_imgs])
+        cv2.imwrite('first-frame.jpg', thresholded_img)
+
+        # img_array = np.reshape(signal, (1080, 1920))
         # Signalize
-        white_in_col = []
-        for col in range(COLSIZE):
-            count = 0
-            for row in range(ROWSIZE):
-                if image_results[row][0, col] >= 128:
-                    count  = count + 1
-            sig = 1 if count > ROWSIZE else 0
-            signals.append(sig)
+        # white_in_col = []
+        # for col in range(COLSIZE):
+        #     count = 0
+        #     for row in range(ROWSIZE):
+        #         if thresholded_img[row][0, col] >= 128:
+        #             count  = count + 1
+        #     sig = 255 if count > ROWSIZE / 2 else 0
+
+
+            signal.append(sig)
+
+        # cv2.imwrite('frame_1.jpg', )    
+        signals.append(signal)
+        
+       
+        
+        break
 
     return signals
