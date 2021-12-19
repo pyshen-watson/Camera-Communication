@@ -16,3 +16,8 @@ If there is a local minimum, then it should be one of the followings:
 - delimiter Fb
 - bit 0
 - bit 1
+
+## TODO
+- [ ] Find the positions of local minimal autocorrelations in a frame
+- [ ] Determine whether there are Da, Db, Fa, Fb, bit 0, or bit 1  (Maybe use inner product?), and get a sequence for every frame
+- [ ] Use the sequence in every frame to infer the final bit message
