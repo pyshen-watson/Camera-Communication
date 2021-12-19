@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from tqdm import tqdm
-
+import modules.autocorrelation as ac
 
 
 def video2frames(cap:cv2.VideoCapture) -> list:
@@ -37,7 +37,9 @@ def video2signal(cap:cv2.VideoCapture) -> list:
             thresholded_row_imgs.append(thresholded_row_img)
 
         thresholded_img = cv2.vconcat([r for r in thresholded_row_imgs])
-        # cv2.imwrite('first-frame.jpg', thresholded_img)
+
+        # observe the result of Otsu threadsholding
+        cv2.imwrite(f'./byproduct/0/otsu-threadshold-by-raw/otsu_threadshold-by_row-{idx+1}.jpg', thresholded_img)
 
         # Signalize
         img_array = np.reshape(thresholded_img, (1920, 1080))
@@ -49,7 +51,12 @@ def video2signal(cap:cv2.VideoCapture) -> list:
             sig = 255 if count > ROWSIZE / 2 else 0
             signal.append(sig)
         array = np.reshape(signal, (1, 1080))
-        cv2.imwrite(f'./frames/14/frame_{idx+1}.jpg', array)    
         signals.append(signal)
+
+        # observe the final frame
+        cv2.imwrite(f'./byproduct/0/frames/frame-{idx+1}.jpg', array)    
+
+        # observe the property of autocorrelation
+        ac.draw_autocorrelation(signal, 90, idx+1)
 
     return signals
