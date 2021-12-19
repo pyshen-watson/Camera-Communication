@@ -48,24 +48,19 @@ def video2signal(cap:cv2.VideoCapture) -> list:
         thresholded_img = cv2.vconcat([r for r in thresholded_row_imgs])
         cv2.imwrite('first-frame.jpg', thresholded_img)
 
-        # img_array = np.reshape(signal, (1080, 1920))
+        img_array = np.reshape(thresholded_img, (1920, 1080))
         # Signalize
-        # white_in_col = []
-        # for col in range(COLSIZE):
-        #     count = 0
-        #     for row in range(ROWSIZE):
-        #         if thresholded_img[row][0, col] >= 128:
-        #             count  = count + 1
-        #     sig = 255 if count > ROWSIZE / 2 else 0
-
-
+        for col in range(COLSIZE):
+            count = 0
+            for row in range(ROWSIZE):
+                if img_array[row, col] >= 128:
+                    count  = count + 1
+            sig = 255 if count > ROWSIZE / 2 else 0
             signal.append(sig)
-
-        # cv2.imwrite('frame_1.jpg', )    
+        array = np.reshape(signal, (1, 1080))
+        
+        cv2.imwrite('frame_1.jpg', array)    
         signals.append(signal)
-        
-       
-        
         break
 
     return signals
