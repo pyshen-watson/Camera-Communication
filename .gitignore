@@ -2,4 +2,4 @@
 testing/
 .venv/
 .vscode/
-__pycache__/
+modules/__pycache__/
