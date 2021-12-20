@@ -38,8 +38,8 @@ def video2signal(cap:cv2.VideoCapture) -> list:
 
         thresholded_img = cv2.vconcat([r for r in thresholded_row_imgs])
 
-        # observe the result of Otsu threadsholding
-        cv2.imwrite(f'./byproduct/0/otsu-threadshold-by-raw/otsu_threadshold-by_row-{idx+1}.jpg', thresholded_img)
+        ## DEBUG: observe the result of Otsu threadsholding
+        # cv2.imwrite(f'./byproduct/0/otsu-threadshold-by-raw/otsu_threadshold-by_row-{idx+1}.jpg', thresholded_img)
 
         # Signalize
         img_array = np.reshape(thresholded_img, (1920, 1080))
@@ -48,15 +48,13 @@ def video2signal(cap:cv2.VideoCapture) -> list:
             for row in range(ROWSIZE):
                 if img_array[row, col] >= 128:
                     count  = count + 1
-            sig = 255 if count > ROWSIZE / 2 else 0
+            sig = 1 if count > ROWSIZE / 2 else -1
             signal.append(sig)
-        array = np.reshape(signal, (1, 1080))
         signals.append(signal)
 
-        # observe the final frame
-        cv2.imwrite(f'./byproduct/0/frames/frame-{idx+1}.jpg', array)    
-
-        # observe the property of autocorrelation
-        ac.draw_autocorrelation(signal, 90, idx+1)
+        ## DEBUG: observe the final frame
+        # array = np.reshape(signal, (1, 1080))
+        # array2 = [255 if x > 0 else 0 for x in array]
+        # cv2.imwrite(f'./byproduct/0/frames/frame-{idx+1}.jpg', array2)    
 
     return signals

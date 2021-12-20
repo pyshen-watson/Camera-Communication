@@ -1,6 +1,7 @@
 import cv2
 import csv
 from modules.video2signal import video2signal
+from modules.signal2tokens import signal2tokens
 
 
 def convert_video_to_signal_csv(video_name, save=True):
@@ -11,11 +12,9 @@ def convert_video_to_signal_csv(video_name, save=True):
     cap.release()
     print('Convert done.')
 
-    if save:
-        with open('./signal.csv', 'w') as file:
-            writer = csv.writer(file)
-            for row in signals:
-                writer.writerow(row)
+    print('Convert signals to tokens')
+    tokens = get_tokens(signals)
+    print('Convert done.')
 
 if __name__ == '__main__':
 
