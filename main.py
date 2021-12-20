@@ -2,6 +2,7 @@ import cv2
 import csv
 from modules.video2signal import video2signal
 from modules.signal2tokens import signal2tokens
+from modules.tokens2message import tokens2message
 
 
 def convert_video_to_signal_csv(video_name, save=True):
@@ -13,8 +14,14 @@ def convert_video_to_signal_csv(video_name, save=True):
     print('Convert done.')
 
     print('Convert signals to tokens')
-    tokens = get_tokens(signals)
+    tokens = signal2tokens(signals)
     print('Convert done.')
+
+    print('Convert tokens to message')
+    message = tokens2message(tokens)
+    print('Convert done')
+    
+    print(f'The message: {message}')
 
 if __name__ == '__main__':
 

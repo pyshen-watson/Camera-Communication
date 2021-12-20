@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 from tqdm import tqdm
-import modules.autocorrelation as ac
 
 
 def video2frames(cap:cv2.VideoCapture) -> list:
@@ -26,7 +25,6 @@ def video2signal(cap:cv2.VideoCapture) -> list:
 
     signals = []
     for idx, frame in enumerate(tqdm(frames)):
-        signal = []
 
         original_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         thresholded_row_imgs = []
@@ -38,10 +36,11 @@ def video2signal(cap:cv2.VideoCapture) -> list:
 
         thresholded_img = cv2.vconcat([r for r in thresholded_row_imgs])
 
-        ## DEBUG: observe the result of Otsu threadsholding
-        # cv2.imwrite(f'./byproduct/0/otsu-threadshold-by-raw/otsu_threadshold-by_row-{idx+1}.jpg', thresholded_img)
+        # DEBUG: observe the result of Otsu threadsholding
+        cv2.imwrite(f'./byproduct/0/otsu-threadshold-by-raw/otsu_threadshold-by_row-{idx+1}.jpg', thresholded_img)
 
         # Signalize
+        signal = []
         img_array = np.reshape(thresholded_img, (1920, 1080))
         for col in range(COLSIZE):
             count = 0
@@ -52,9 +51,13 @@ def video2signal(cap:cv2.VideoCapture) -> list:
             signal.append(sig)
         signals.append(signal)
 
-        ## DEBUG: observe the final frame
-        # array = np.reshape(signal, (1, 1080))
-        # array2 = [255 if x > 0 else 0 for x in array]
-        # cv2.imwrite(f'./byproduct/0/frames/frame-{idx+1}.jpg', array2)    
+        # DEBUG: observe the final frame
+        array1 = [(255 if x > 0 else 0) for x in signal]
+        array2 = np.array(array1)
+        array3 = np.reshape(array2, (1, 1080))
+        cv2.imwrite(f'./byproduct/0/frames/frame-{idx+1}.jpg', array3)    
+
+        # # DEBUG: only process the first frame 
+        # break
 
     return signals

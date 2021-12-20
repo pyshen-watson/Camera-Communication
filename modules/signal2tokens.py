@@ -15,18 +15,22 @@ HL_LENGTH = 6
 
 def signal2tokens(signals:list) -> list:
   token_sequences = []
-  for idx, signal in enumerate(signals):
+  for idx, signal in enumerate(tqdm(signals)):
     autocorrelations = []
     for i in range(1080 - (AUTOCORRELATION_LENGTH - 1)):
         autocorrelations.append(getAutocorrelation(signal[i:i+AUTOCORRELATION_LENGTH]))   
-    ## DEBUG: autocorrelations
-    # positions = range(1080 - (AUTOCORRELATION_LENGTH - 1))
-    # plt.plot(positions, autocorrelations)
-    # plt.savefig(f'./byproduct/0/autocorrelations/autocorrelation-{idx+1}.jpg')
-    # plt.clf()
+
+    # DEBUG: autocorrelations
+    positions = range(1080 - (AUTOCORRELATION_LENGTH - 1))
+    plt.plot(positions, autocorrelations)
+    plt.savefig(f'./byproduct/0/autocorrelations/autocorrelation-{idx+1}.jpg')
+    plt.clf()
 
     min_positions = argrelextrema(np.array(autocorrelations), np.less)
     token_sequence = get_token_sequence(signal, min_positions)
+
+  # stub
+  return []
 
 def getAutocorrelation(signal:list) -> int:
     sum = 0
@@ -37,4 +41,5 @@ def getAutocorrelation(signal:list) -> int:
     return sum
 
 def get_token_sequence(signal, min_positions):
-  pass
+  # stub
+  return []
